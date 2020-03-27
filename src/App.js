@@ -14,26 +14,26 @@ import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 import { setCurrentUser } from "./redux/user/user.actions";
 import { selectCurrentUser } from "./redux/user/user.selector";
 
-const App = ({ setCurrentUser }) => {
-  useEffect(() => {
-    const unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
-      if (userAuth) {
-        const userRef = await createUserProfileDocument(userAuth);
+const App = ({ currentUser, setCurrentUser }) => {
+  // useEffect(() => {
+  //   const unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+  //     if (userAuth) {
+  //       const userRef = await createUserProfileDocument(userAuth);
 
-        userRef.onSnapshot(snapShot => {
-          setCurrentUser({
-            id: snapShot.id,
-            ...snapShot.data()
-          });
-        });
-      } else {
-        setCurrentUser(null);
-      }
-      return () => {
-        unsubscribeFromAuth();
-      };
-    });
-  }, [setCurrentUser]);
+  //       userRef.onSnapshot(snapShot => {
+  //         setCurrentUser({
+  //           id: snapShot.id,
+  //           ...snapShot.data()
+  //         });
+  //       });
+  //     } else {
+  //       setCurrentUser(null);
+  //     }
+  //     return () => {
+  //       unsubscribeFromAuth();
+  //     };
+  //   });
+  // }, [setCurrentUser]);
 
   return (
     <div>
@@ -46,7 +46,7 @@ const App = ({ setCurrentUser }) => {
           exact
           path="/signin"
           render={() =>
-            this.props.currentUser ? <Redirect to="/" /> : <SignInAndSignUp />
+            currentUser ? <Redirect to="/" /> : <SignInAndSignUp />
           }
         />
         <Route exact path="/contact" component={ContactPage} />
